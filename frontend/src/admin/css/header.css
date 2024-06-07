@@ -1,0 +1,116 @@
+.header {
+  background: linear-gradient(90deg, rgb(2, 48, 67), rgb(6, 144, 201));
+  color: white;
+}
+
+.header .flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.header .flex .logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.header .flex .logo-container .img-container {
+  height: 3rem;
+  width: 3rem;
+}
+
+.header .flex .logo-container .img-container img {
+  object-fit: contain;
+  width: 100%;
+}
+
+.header .flex .logo-container .header-title {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.header .flex .logo-container .header-title .admin {
+  color: var(--white);
+}
+
+.header .flex .logo-container .header-title .panel {
+  color: var(--main-color);
+}
+
+.header .flex .navbar a {
+  position: relative;
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin: 0 2rem;
+  color: var(--white);
+  transition: color 0.3s ease;
+}
+
+.header .flex .navbar a:hover {
+  color: var(--aqua);
+}
+
+.header .flex .navbar a.active {
+  font-weight: 700;
+}
+
+.header .flex .icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.header .flex .icons > * {
+  color: white;
+  font-size: 1.8rem;
+  margin: 0 1rem;
+}
+
+.header .flex .icons > *:hover {
+  color: var(--aqua);
+}
+
+#menu-icon {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .header .flex .navbar a {
+    margin: 0 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header .flex .icons #menu-icon {
+    display: block;
+  }
+
+  .header .flex .navbar {
+    position: absolute;
+    top: 99%;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    transition: 0.2s linear;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    border-bottom: 1px solid var(--whitesmoke);
+  }
+
+  .header .flex .navbar.active {
+    z-index: 9;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  }
+
+  .header .flex .navbar a {
+    display: block;
+    color: var(--black);
+    margin: 1rem;
+  }
+}
