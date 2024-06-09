@@ -12,6 +12,7 @@ import Projects from "./admin/pages/Projects";
 import Clients from "./admin/pages/Clients";
 import Register from "./admin/pages/Register";
 import AddProject from "./admin/pages/AddProject";
+import AddClient from "./admin/pages/AddClient";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/clients",
     element: <Clients />,
+  },
+  {
+    path: "/admin/add-client",
+    element: <AddClient />,
   },
 ]);
 

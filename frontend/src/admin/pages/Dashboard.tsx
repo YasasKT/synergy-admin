@@ -51,18 +51,22 @@ function Dashboard() {
               </div>
               <div className="text">Manage Blogs</div>
             </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-shake-hands-fill"></i>
+            <Link to="/admin/add-client">
+              <div className="box">
+                <div className="icon">
+                  <i className="ri-shake-hands-fill"></i>
+                </div>
+                <div className="text">Manage Clients</div>
               </div>
-              <div className="text">Manage Clients</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-bar-chart-box-fill"></i>
+            </Link>
+            <Link to="/admin/projects">
+              <div className="box">
+                <div className="icon">
+                  <i className="ri-bar-chart-box-fill"></i>
+                </div>
+                <div className="text">All Projects ({projects.length})</div>
               </div>
-              <div className="text">All Projects ({projects.length})</div>
-            </div>
+            </Link>
             <div className="box">
               <div className="icon">
                 <i className="ri-mail-fill"></i>

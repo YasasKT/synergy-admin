@@ -6,6 +6,9 @@
   --whitesmoke: rgb(231, 231, 231);
   --grey: #acacac;
   --black: #424242;
+  --yellow: rgb(235, 199, 0);
+  --bg: #fafafa;
+  --bg-blue: #82daff;
   --aqua: #00b4ff;
   --link: #0690c9;
   --red: rgb(255, 59, 59);
@@ -30,6 +33,11 @@
   border: none;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+body {
+  background-color: var(--white);
 }
 
 html {
@@ -81,7 +89,7 @@ section {
   padding: 2.2rem;
   gap: 1rem;
   border-radius: 8px;
-  background-color: transparent;
+  background-color: var(--white);
   border: var(--border);
   box-shadow: 0 5px 6px rgba(0, 0, 0, 0.5);
   max-width: 60rem;

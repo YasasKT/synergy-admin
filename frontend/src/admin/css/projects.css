@@ -1,0 +1,82 @@
+.tbl {
+  text-align: left;
+  width: 100%;
+  border-spacing: 0;
+}
+
+.tbl th,
+.tbl td {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--grey);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tbl-icon {
+  font-size: 1.1rem;
+  background-color: transparent;
+  cursor: pointer;
+  margin: 0 0.5rem;
+}
+
+.tbl-icon:nth-child(1):hover {
+  color: var(--yellow);
+}
+
+.tbl-icon:nth-child(2):hover {
+  color: var(--red);
+}
+
+#menu-container {
+  position: relative;
+  overflow: visible;
+}
+
+.menu-icon {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.menu-icon:hover {
+  color: var(--main-color);
+}
+
+.popup-menu {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  right: 95%;
+}
+
+.popup-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 3px;
+  background-color: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+}
+
+.popup-menu button:nth-child(1) {
+  margin-bottom: 5px;
+}
+
+.popup-menu button:nth-child(1):hover {
+  color: var(--white);
+  background-color: var(--yellow);
+}
+
+.popup-menu button:nth-child(2):hover {
+  color: var(--white);
+  background-color: var(--red);
+}

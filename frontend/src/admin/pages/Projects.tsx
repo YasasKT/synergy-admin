@@ -1,59 +1,87 @@
 import "../css/main.css";
-import "../css/dashboard.css";
+import "../css/projects.css";
 import Header from "../components/Header";
+import { useEffect, useState } from "react";
+import { Project as ProjectModel } from "../models/project";
+import { HiDotsVertical } from "react-icons/hi";
 
 function Projects() {
+  const [projects, setProjects] = useState<ProjectModel[]>([]);
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        const response = await fetch("http://localhost:5000/api/projects", {
+          method: "GET",
+        });
+        const projects = await response.json();
+        setProjects(projects);
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
+    }
+    loadProjects();
+  }, []);
+
+  const togglePopup = (projectId: string) => {
+    setActiveProjectId((prevId) => (prevId === projectId ? null : projectId));
+  };
+
+  const handleEditClick = () => {};
+
+  const handleDeleteClick = () => {};
+
   return (
     <div>
       <Header />
-      <section className="dashboard">
-        <div className="left-column">
-          <div className="welcome">Projects page</div>
-          <div className="notification">You have received 5 messages.</div>
-          <div className="link">
-            <i className="ri-arrow-right-double-line"></i>See messages
-          </div>
-        </div>
-        <div className="right-column">
-          <div className="box-container">
-            <div className="box">
-              <div className="icon">
-                <i className="ri-add-box-fill"></i>
-              </div>
-              <div className="text">New Project</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-news-fill"></i>
-              </div>
-              <div className="text">Manage Blogs</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-shake-hands-fill"></i>
-              </div>
-              <div className="text">Manage Clients</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-bar-chart-box-fill"></i>
-              </div>
-              <div className="text">All Projects</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-mail-fill"></i>
-              </div>
-              <div className="text">Messages</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-shield-user-fill"></i>
-              </div>
-              <div className="text">Admins</div>
-            </div>
-          </div>
-        </div>
+      <section className="projects">
+        <table className="tbl">
+          <thead className="tbl-header">
+            <tr>
+              <th>ID</th>
+              <th>Type</th>
+              <th>Client</th>
+              <th>Location</th>
+              <th>Year</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          {projects.map((project, index) => (
+            <tbody>
+              <tr>
+                <td>{index + 1}</td>
+                <td>{project.type}</td>
+                <td>{project.client}</td>
+                <td>{project.location}</td>
+                <td>{project.year}</td>
+                <td>{project.description}</td>
+                <td id="menu-container">
+                  {activeProjectId === project._id && (
+                    <div className="popup-menu">
+                      <button className="popup-btn" onClick={handleEditClick}>
+                        Edit
+                      </button>
+                      <button className="popup-btn" onClick={handleDeleteClick}>
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    className="menu-icon"
+                    onClick={() => {
+                      togglePopup(project._id);
+                    }}
+                  >
+                    <HiDotsVertical />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          ))}
+        </table>
       </section>
     </div>
   );

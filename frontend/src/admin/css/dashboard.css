@@ -25,7 +25,7 @@
 }
 
 .dashboard .right-column .box-container {
-  background-color: #82daff;
+  background-color: var(--bg-blue);
   padding: 2rem;
   display: grid;
   grid-template-columns: repeat(3, minmax(11rem, 1fr));
@@ -36,7 +36,8 @@
 }
 
 .dashboard .right-column .box-container .box {
-  background-color: var(--aqua);
+  background-color: var(--link);
+  color: var(--white);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -48,7 +49,7 @@
 }
 
 .dashboard .right-column .box-container .box:hover {
-  background-color: var(--black);
+  background-color: var(--aqua);
 }
 
 .dashboard .right-column .box-container .box .icon {
@@ -60,14 +61,6 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-}
-
-.dashboard .right-column .box-container .box:hover .icon {
-  color: var(--white);
-}
-
-.dashboard .right-column .box-container .box:hover .text {
-  color: var(--white);
 }
 
 @media (max-width: 768px) {
