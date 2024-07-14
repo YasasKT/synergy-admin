@@ -1,21 +1,24 @@
 import "../css/main.css";
-import "../css/projects.css";
+import "../css/table.css";
 import Header from "../components/Header";
-import { useEffect, useState } from "react";
-import { Project as ProjectModel } from "../models/project";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Client as ProjectModel } from "../models/project";
 import { HiDotsVertical } from "react-icons/hi";
+import * as ProjectsApi from "../../network/projects_api";
+import SearchBar from "../components/Search";
+import SmallButton from "../components/SmallButton";
+import { useNavigate } from "react-router-dom";
 
 function Projects() {
   const [projects, setProjects] = useState<ProjectModel[]>([]);
+  const [query, setQuery] = useState("");
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadProjects() {
       try {
-        const response = await fetch("http://localhost:5000/api/projects", {
-          method: "GET",
-        });
-        const projects = await response.json();
+        const projects = await ProjectsApi.fetchProjects();
         setProjects(projects);
       } catch (error) {
         console.error(error);
@@ -29,42 +32,76 @@ function Projects() {
     setActiveProjectId((prevId) => (prevId === projectId ? null : projectId));
   };
 
-  const handleEditClick = () => {};
+  const handleEditClick = (project: ProjectModel) => {
+    navigate(`/admin/projects/edit/${project._id}`);
+  };
 
-  const handleDeleteClick = () => {};
+  async function handleDeleteClick(project: ProjectModel) {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      try {
+        await ProjectsApi.deleteProject(project._id);
+        setProjects(
+          projects.filter(
+            (existingProject) => existingProject._id !== project._id
+          )
+        );
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
+    }
+  }
+
+  const filteredItems = projects.filter((project) => {
+    return project.client.toLowerCase().includes(query.toLowerCase());
+  });
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value);
+  };
 
   return (
     <div>
       <Header />
-      <section className="projects">
+      <section>
+        <div className="flex">
+          <SearchBar query={query} onSearchChange={handleSearchChange} />
+          <SmallButton to="/admin/projects/add" />
+        </div>
+
         <table className="tbl">
-          <thead className="tbl-header">
+          <thead>
             <tr>
-              <th>ID</th>
+              <th></th>
               <th>Type</th>
               <th>Client</th>
               <th>Location</th>
               <th>Year</th>
-              <th>Description</th>
               <th></th>
             </tr>
           </thead>
-          {projects.map((project, index) => (
-            <tbody>
-              <tr>
+          <tbody>
+            {filteredItems.map((project, index) => (
+              <tr key={project._id}>
                 <td>{index + 1}</td>
                 <td>{project.type}</td>
                 <td>{project.client}</td>
                 <td>{project.location}</td>
                 <td>{project.year}</td>
-                <td>{project.description}</td>
                 <td id="menu-container">
                   {activeProjectId === project._id && (
                     <div className="popup-menu">
-                      <button className="popup-btn" onClick={handleEditClick}>
+                      <button
+                        className="popup-btn"
+                        onClick={() => handleEditClick(project)}
+                      >
                         Edit
                       </button>
-                      <button className="popup-btn" onClick={handleDeleteClick}>
+                      <button
+                        className="popup-btn"
+                        onClick={() => handleDeleteClick(project)}
+                      >
                         Delete
                       </button>
                     </div>
@@ -79,8 +116,8 @@ function Projects() {
                   </button>
                 </td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+          </tbody>
         </table>
       </section>
     </div>

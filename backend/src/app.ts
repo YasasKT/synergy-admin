@@ -1,8 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import ProjectRoute from "./routes/projectRoute";
+import ClientRoute from "./routes/clientRoute";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
 import cors from "cors";
+import path from "path";
 
 const app = express();
 
@@ -12,7 +14,13 @@ app.use(express.json());
 
 app.use(cors());
 
+app.use(express.static("public"));
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use("/api/projects", ProjectRoute);
+
+app.use("/api/clients", ClientRoute);
 
 app.use((req, res, next) => {
   next(createHttpError(404, "Endpoint not found"));

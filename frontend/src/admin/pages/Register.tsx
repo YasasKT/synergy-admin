@@ -22,7 +22,7 @@ const Register = () => {
       <form className="login-form-container">
         <h1>Register</h1>
         <div className="input-box">
-          <input type="text" name="secret_key" placeholder="Enter Secret Key" />
+          <input type="text" name="secret_key" placeholder="Enter Secret Key" autoComplete="off" />
         </div>
         <div className="input-box">
           <input

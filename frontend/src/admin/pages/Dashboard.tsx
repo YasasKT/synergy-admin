@@ -2,11 +2,11 @@ import "../css/main.css";
 import "../css/dashboard.css";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
-import { Project } from "../models/project";
+import { Client } from "../models/project";
 import { Link } from "react-router-dom";
 
 function Dashboard() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Client[]>([]);
 
   useEffect(() => {
     async function loadProjects() {
@@ -37,7 +37,7 @@ function Dashboard() {
         </div>
         <div className="right-column">
           <div className="box-container">
-            <Link to="/admin/add-project">
+            <Link to="/admin/projects/add">
               <div className="box">
                 <div className="icon">
                   <i className="ri-add-box-fill"></i>

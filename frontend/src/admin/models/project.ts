@@ -1,4 +1,4 @@
-export interface Project {
+export interface Client {
   _id: string;
   type: string;
   client: string;

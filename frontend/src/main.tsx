@@ -11,8 +11,8 @@ import ClientNotFound from "./client/pages/ClientNotFound";
 import Projects from "./admin/pages/Projects";
 import Clients from "./admin/pages/Clients";
 import Register from "./admin/pages/Register";
-import AddProject from "./admin/pages/AddProject";
-import AddClient from "./admin/pages/AddClient";
+import AddEditProject from "./admin/pages/AddEditProject";
+import AddEditClient from "./admin/pages/AddEditClient";
 
 const router = createBrowserRouter([
   {
@@ -45,16 +45,24 @@ const router = createBrowserRouter([
     element: <Projects />,
   },
   {
-    path: "/admin/add-project",
-    element: <AddProject />,
+    path: "/admin/projects/add",
+    element: <AddEditProject />,
+  },
+  {
+    path: "/admin/projects/edit/:id",
+    element: <AddEditProject />,
   },
   {
     path: "/admin/clients",
     element: <Clients />,
   },
   {
-    path: "/admin/add-client",
-    element: <AddClient />,
+    path: "/admin/clients/add",
+    element: <AddEditClient />,
+  },
+  {
+    path: "/admin/clients/edit/:id",
+    element: <AddEditClient />,
   },
 ]);
 

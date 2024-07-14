@@ -1,59 +1,128 @@
 import "../css/main.css";
-import "../css/dashboard.css";
+import "../css/table.css";
 import Header from "../components/Header";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Client as ClientModel } from "../models/client";
+import { HiDotsVertical } from "react-icons/hi";
+import * as ClientsApi from "../../network/clients_api";
+import SearchBar from "../components/Search";
+import SmallButton from "../components/SmallButton";
+import { useNavigate } from "react-router-dom";
 
 function Clients() {
+  const [clients, setClients] = useState<ClientModel[]>([]);
+  const [query, setQuery] = useState("");
+  const [activeClientId, setActiveClientId] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function loadClients() {
+      try {
+        const clients = await ClientsApi.fetchClients();
+        setClients(clients);
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
+    }
+    loadClients();
+  }, []);
+
+  const togglePopup = (clientId: string) => {
+    setActiveClientId((prevId) => (prevId === clientId ? null : clientId));
+  };
+
+  const handleEditClick = (client: ClientModel) => {
+    navigate(`/admin/clients/edit/${client._id}`);
+  };
+
+  async function handleDeleteClick(client: ClientModel) {
+    if (window.confirm("Are you sure you want to delete this client?")) {
+      try {
+        await ClientsApi.deleteClient(client._id);
+        setClients(
+          clients.filter((existingClient) => existingClient._id !== client._id)
+        );
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
+    }
+  }
+
+  const filteredItems = clients.filter((client) => {
+    return client.name.toLowerCase().includes(query.toLowerCase());
+  });
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value);
+  };
+
+  const formatImageUrl = (url: string) => {
+    return url.replace("public\\", "http://localhost:5000/");
+  };
+
   return (
     <div>
       <Header />
-      <section className="dashboard">
-        <div className="left-column">
-          <div className="welcome">Clients page</div>
-          <div className="notification">You have received 5 messages.</div>
-          <div className="link">
-            <i className="ri-arrow-right-double-line"></i>See messages
-          </div>
+      <section>
+        <div className="flex">
+          <SearchBar query={query} onSearchChange={handleSearchChange} />
+          <SmallButton to="/admin/clients/add" />
         </div>
-        <div className="right-column">
-          <div className="box-container">
-            <div className="box">
-              <div className="icon">
-                <i className="ri-add-box-fill"></i>
-              </div>
-              <div className="text">New Project</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-news-fill"></i>
-              </div>
-              <div className="text">Manage Blogs</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-shake-hands-fill"></i>
-              </div>
-              <div className="text">Manage Clients</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-bar-chart-box-fill"></i>
-              </div>
-              <div className="text">All Projects</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-mail-fill"></i>
-              </div>
-              <div className="text">Messages</div>
-            </div>
-            <div className="box">
-              <div className="icon">
-                <i className="ri-shield-user-fill"></i>
-              </div>
-              <div className="text">Admins</div>
-            </div>
-          </div>
-        </div>
+
+        <table className="tbl">
+          <thead>
+            <tr>
+              <th className="hd-id"></th>
+              <th className="hd-image">Image</th>
+              <th className="hd-name">Name</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredItems.map((client, index) => (
+              <tr key={client._id}>
+                <td>{index + 1}</td>
+                <td className="image-cell">
+                  <img
+                    src={formatImageUrl(client.imageUrl)}
+                    alt={client.name}
+                    className="image"
+                  />
+                </td>
+                <td>{client.name}</td>
+                <td id="menu-container">
+                  {activeClientId === client._id && (
+                    <div className="popup-menu">
+                      <button
+                        className="popup-btn"
+                        onClick={() => handleEditClick(client)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="popup-btn"
+                        onClick={() => handleDeleteClick(client)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    className="menu-icon"
+                    onClick={() => {
+                      togglePopup(client._id);
+                    }}
+                  >
+                    <HiDotsVertical />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     </div>
   );
