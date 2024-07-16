@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import "../css/main.css";
 import Uploader from "../components/Uploader";
-import { Client } from "../models/project";
+import { Project } from "../models/project";
 import { useForm } from "react-hook-form";
 import { ProjectInput } from "../../network/projects_api";
 import * as ProjectsApi from "../../network/projects_api";
@@ -11,7 +11,12 @@ import { useEffect, useState } from "react";
 const AddEditProject = () => {
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
-  const [existingProject, setExistingProject] = useState<Client | null>(null);
+  const [existingProject, setExistingProject] = useState<Project | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [defaultImage = existingProject?.imageUrl, setDefaultImage] = useState<
+    string | null
+  >(null);
+  const [showImageError, setShowImageError] = useState(false);
 
   const {
     register,
@@ -26,6 +31,8 @@ const AddEditProject = () => {
         try {
           const project = await ProjectsApi.fetchProject(id);
           setExistingProject(project);
+          setDefaultImage(project.imageUrl);
+          setImage(null);
           setValue("type", project.type);
           setValue("client", project.client);
           setValue("location", project.location);
@@ -40,16 +47,39 @@ const AddEditProject = () => {
     fetchProject();
   }, [id, setValue]);
 
+  const handleImageChange = (file: File | null) => {
+    console.log("image changed: ", file);
+    setImage(file);
+    setShowImageError(false);
+  };
+
   async function onProjectSubmit(input: ProjectInput) {
+    if (!image && !defaultImage) {
+      setShowImageError(true);
+      return;
+    }
+
     try {
+      const formData = new FormData();
+      if (image) {
+        formData.append("imageUrl", image);
+      }
+      formData.append("type", input.type);
+      formData.append("client", input.client);
+      formData.append("location", input.location);
+      formData.append("year", input.year.toString());
+      if (input.description) {
+        formData.append("description", input.description);
+      }
+
       if (existingProject) {
         const updatedProject = await ProjectsApi.updateProject(
           existingProject._id,
-          input
+          formData
         );
         onProjectSave(updatedProject);
       } else {
-        const newProject = await ProjectsApi.createProject(input);
+        const newProject = await ProjectsApi.createProject(formData);
         onProjectSave(newProject);
       }
     } catch (error) {
@@ -58,7 +88,7 @@ const AddEditProject = () => {
     }
   }
 
-  async function onProjectSave(project: Client) {
+  async function onProjectSave(project: Project) {
     console.log("Project Saved: ", project);
     navigate("/admin/projects");
   }
@@ -74,7 +104,14 @@ const AddEditProject = () => {
             onSubmit={handleSubmit(onProjectSubmit)}
             className="form-container"
           >
-            <Uploader />
+            <Uploader
+              onImageChange={handleImageChange}
+              setImage={setImage}
+              image={image}
+              setDefaultImage={setDefaultImage}
+              defaultImage={defaultImage}
+              showError={showImageError}
+            />
             <div className="input-box-container">
               <div className="title-container">
                 <span className="title">Type</span>

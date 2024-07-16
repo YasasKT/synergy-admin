@@ -51,7 +51,7 @@ function Dashboard() {
               </div>
               <div className="text">Manage Blogs</div>
             </div>
-            <Link to="/admin/add-client">
+            <Link to="/admin/clients">
               <div className="box">
                 <div className="icon">
                   <i className="ri-shake-hands-fill"></i>

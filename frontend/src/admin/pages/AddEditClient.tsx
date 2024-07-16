@@ -13,6 +13,10 @@ const AddEditClient = () => {
   const navigate = useNavigate();
   const [existingClient, setExistingClient] = useState<Client | null>(null);
   const [image, setImage] = useState<File | null>(null);
+  const [defaultImage = existingClient?.imageUrl, setDefaultImage] = useState<
+    string | null
+  >(null);
+  const [showImageError, setShowImageError] = useState(false);
 
   const {
     register,
@@ -28,6 +32,7 @@ const AddEditClient = () => {
           const client = await ClientsApi.fetchClient(id);
           setExistingClient(client);
           setValue("name", client.name);
+          setDefaultImage(client.imageUrl);
           setImage(null);
         } catch (error) {
           console.error(error);
@@ -41,9 +46,15 @@ const AddEditClient = () => {
   const handleImageChange = (file: File | null) => {
     console.log("image changed: ", file);
     setImage(file);
+    setShowImageError(false);
   };
 
   async function onClientSubmit(input: ClientInput) {
+    if (!image && !defaultImage) {
+      setShowImageError(true);
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("name", input.name);
@@ -88,7 +99,9 @@ const AddEditClient = () => {
               onImageChange={handleImageChange}
               setImage={setImage}
               image={image}
-              defaultImage={existingClient?.imageUrl}
+              setDefaultImage={setDefaultImage}
+              defaultImage={defaultImage}
+              showError={showImageError}
             />
             <div className="input-box-container">
               <div className="title-container">
