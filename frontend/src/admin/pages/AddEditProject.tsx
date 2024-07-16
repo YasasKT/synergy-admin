@@ -5,23 +5,30 @@ import { Project } from "../models/project";
 import { useForm } from "react-hook-form";
 import { ProjectInput } from "../../network/projects_api";
 import * as ProjectsApi from "../../network/projects_api";
+import * as ClientsApi from "../../network/clients_api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Client } from "../models/client";
+import CustomDropdown from "../components/CustomDropdown";
 
 const AddEditProject = () => {
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
   const [existingProject, setExistingProject] = useState<Project | null>(null);
+  const [clients, setClients] = useState<Client[]>([]);
   const [image, setImage] = useState<File | null>(null);
   const [defaultImage = existingProject?.imageUrl, setDefaultImage] = useState<
     string | null
   >(null);
   const [showImageError, setShowImageError] = useState(false);
+  const [clientError, setClientError] = useState<string | undefined>(undefined);
+  const [isClientValid, setIsClientValid] = useState(false);
 
   const {
     register,
     handleSubmit,
     setValue,
+    trigger,
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm<ProjectInput>();
 
@@ -38,12 +45,24 @@ const AddEditProject = () => {
           setValue("location", project.location);
           setValue("year", project.year);
           setValue("description", project.description);
+          setIsClientValid(true);
         } catch (error) {
           console.error(error);
           alert(error);
         }
       }
     };
+
+    async function loadClients() {
+      try {
+        const clients = await ClientsApi.fetchClients();
+        setClients(clients);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadClients();
     fetchProject();
   }, [id, setValue]);
 
@@ -53,9 +72,31 @@ const AddEditProject = () => {
     setShowImageError(false);
   };
 
-  async function onProjectSubmit(input: ProjectInput) {
+  const validateForm = async () => {
+    const isValid = await trigger();
+    let hasError = false;
+
     if (!image && !defaultImage) {
       setShowImageError(true);
+      hasError = true;
+    } else {
+      setShowImageError(false);
+    }
+
+    if (!isClientValid) {
+      setClientError("Client is Required");
+      hasError = true;
+    } else {
+      setClientError(undefined);
+    }
+
+    return isValid && !hasError;
+  };
+
+  async function onProjectSubmit(input: ProjectInput) {
+    const isValid = await validateForm();
+
+    if (!isValid) {
       return;
     }
 
@@ -93,6 +134,11 @@ const AddEditProject = () => {
     navigate("/admin/projects");
   }
 
+  const handleClientChange = (selectedClient: string) => {
+    setValue("client", selectedClient);
+    setIsClientValid(true);
+  };
+
   return (
     <>
       <Header />
@@ -124,6 +170,7 @@ const AddEditProject = () => {
               >
                 <input
                   type="text"
+                  placeholder="e.g. : Electrical Installation"
                   {...register("type", { required: "Type is Required" })}
                   autoComplete="off"
                 />
@@ -137,20 +184,14 @@ const AddEditProject = () => {
                 <span className="title">Client</span>
                 <span className="required"> *</span>
               </div>
-              <div
-                className={`input-box ${
-                  errors.client ? "invalid" : dirtyFields.client ? "valid" : ""
-                }`}
-              >
-                <input
-                  type="text"
-                  {...register("client", { required: "Client is Required" })}
-                  autoComplete="off"
-                />
-                {errors.client && (
-                  <p className="error-message">{errors.client.message}</p>
-                )}
-              </div>
+              <CustomDropdown
+                options={clients.map((client) => client.name)}
+                defaultValue={existingProject?.client || "Select Client"}
+                onChange={handleClientChange}
+                error={clientError}
+                isValid={isClientValid}
+              />
+              {clientError && <p className="error-message">{clientError}</p>}
             </div>
             <div className="input-box-container">
               <div className="title-container">
@@ -234,6 +275,7 @@ const AddEditProject = () => {
                 type="submit"
                 form="addEditProjectForm"
                 className="add-btn"
+                onClick={validateForm}
                 disabled={isSubmitting}
               >
                 {existingProject ? "Update Project" : "Add Project"}

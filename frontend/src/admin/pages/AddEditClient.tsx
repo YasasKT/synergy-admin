@@ -22,6 +22,7 @@ const AddEditClient = () => {
     register,
     handleSubmit,
     setValue,
+    trigger,
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm<ClientInput>();
 
@@ -49,9 +50,24 @@ const AddEditClient = () => {
     setShowImageError(false);
   };
 
-  async function onClientSubmit(input: ClientInput) {
+  const validateForm = async () => {
+    const isValid = await trigger();
+    let hasError = false;
+
     if (!image && !defaultImage) {
       setShowImageError(true);
+      hasError = true;
+    } else {
+      setShowImageError(false);
+    }
+
+    return isValid && !hasError;
+  };
+
+  async function onClientSubmit(input: ClientInput) {
+    const isValid = await validateForm();
+
+    if (!isValid) {
       return;
     }
 
@@ -128,6 +144,7 @@ const AddEditClient = () => {
                 type="submit"
                 form="addEditClientForm"
                 className="add-btn"
+                onClick={validateForm}
                 disabled={isSubmitting}
               >
                 {existingClient ? "Update Client" : "Add Client"}
