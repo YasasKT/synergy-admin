@@ -31,6 +31,14 @@
   color: var(--white);
 }
 
+.login-register-bg .login-form-container .input-box {
+  margin: 1rem 0;
+}
+
+.login-register-bg .login-form-container .input-box:focus-within {
+  border: var(--border-focus);
+}
+
 .login-register-bg .login-form-container .input-box input::placeholder {
   color: var(--grey);
 }

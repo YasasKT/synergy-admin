@@ -1,48 +1,96 @@
-import { Link } from "react-router-dom";
-// import "../css/main.css";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/login-register.css";
-// import { ChangeEvent, FormEvent, useState } from "react";
+import { User } from "../models/user";
+import { useForm } from "react-hook-form";
+import * as UsersApi from "../../network/users_api";
+import { useState } from "react";
 
 const Register = () => {
-  // const [name, setName] = useState<string>();
-  // const [password, setPassword] = useState<string>();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm<UsersApi.SignUpCredentials>();
 
-  // const handleNameChange = (e: ChangeEvent<HTMLInputElement>) =>
-  //   setName(e.target.value);
+  const navigate = useNavigate();
+  const [backendError, setBackendError] = useState<string | undefined>(
+    undefined
+  );
 
-  // const handlePasswordeChange = (e: ChangeEvent<HTMLInputElement>) =>
-  //   setPassword(e.target.value);
+  async function onSubmit(credentials: UsersApi.SignUpCredentials) {
+    try {
+      const newUser = await UsersApi.signUp(credentials);
+      onSignUpSuccessful(newUser);
+    } catch (error) {
+      console.error(error);
+      setBackendError(
+        (error as { message: string }).message ||
+          "An error occurred. Please try again."
+      );
+    }
+  }
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  // };
+  async function onSignUpSuccessful(user: User) {
+    console.log("Signup Successful: ", user);
+    navigate("/admin/login");
+  }
 
   return (
     <div className="login-register-bg">
-      <form className="login-form-container">
+      <form className="login-form-container" onSubmit={handleSubmit(onSubmit)}>
         <h1>Register</h1>
-        <div className="input-box">
-          <input type="text" name="secret_key" placeholder="Enter Secret Key" autoComplete="off" />
-        </div>
-        <div className="input-box">
+        {backendError && <p className="error-message">{backendError}</p>}
+        {/* <div
+          className={`input-box ${
+            errors.secret_key ? "invalid" : dirtyFields.secret_key ? "valid" : ""
+          }`}
+        >
           <input
             type="text"
-            name="username"
-            placeholder="Enter Username"
-            autoComplete="name"
+            placeholder="Enter Secret Key"
+            {...register("secret_key", { required: "Secret Key is Required" })}
+            autoComplete="off"
           />
+        </div> */}
+        <div className={`input-box ${errors.username ? "invalid" : ""}`}>
+          <input
+            type="text"
+            placeholder="Enter Username"
+            {...register("username", { required: "Username is Required" })}
+            autoComplete="off"
+          />
+          {errors.username && (
+            <p className="error-message">{errors.username.message}</p>
+          )}
         </div>
-        <div className="input-box">
-          <input type="password" name="password" placeholder="Enter Password" />
-        </div>
-        <div className="input-box">
+        <div className={`input-box ${errors.password ? "invalid" : ""}`}>
           <input
             type="password"
-            name="password"
-            placeholder="Confirm Password"
+            placeholder="Enter Password"
+            {...register("password", { required: "Password is Required" })}
+            autoComplete="off"
           />
+          {errors.password && (
+            <p className="error-message">{errors.password.message}</p>
+          )}
         </div>
-        <button className="btn" type="submit">
+        <div className={`input-box ${errors.confirmPassword ? "invalid" : ""}`}>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            {...register("confirmPassword", {
+              required: "Please re-enter your Password",
+              validate: (value) =>
+                value === getValues("password") || "Passwords do not match",
+            })}
+            autoComplete="off"
+          />
+          {errors.confirmPassword && (
+            <p className="error-message">{errors.confirmPassword.message}</p>
+          )}
+        </div>
+        <button className="btn" type="submit" disabled={isSubmitting}>
           Register
         </button>
         <Link to="/admin/login" className="nav-link">

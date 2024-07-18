@@ -2,11 +2,13 @@ import "../css/main.css";
 import "../css/dashboard.css";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
-import { Client } from "../models/project";
+import { Project } from "../models/project";
+import { Client } from "../models/client";
 import { Link } from "react-router-dom";
 
 function Dashboard() {
-  const [projects, setProjects] = useState<Client[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
 
   useEffect(() => {
     async function loadProjects() {
@@ -24,9 +26,28 @@ function Dashboard() {
     loadProjects();
   }, []);
 
+  useEffect(() => {
+    async function loadClients() {
+      try {
+        const response = await fetch("http://localhost:5000/api/clients", {
+          method: "GET",
+        });
+        const clients = await response.json();
+        setClients(clients);
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
+    }
+    loadClients();
+  }, []);
+
   return (
     <>
-      <Header />
+      <Header 
+      user={null}
+      onLogoutSuccessful={() => {}}
+      />
       <section className="dashboard">
         <div className="left-column">
           <div className="welcome">Welcome, Katudampe</div>
@@ -56,7 +77,7 @@ function Dashboard() {
                 <div className="icon">
                   <i className="ri-shake-hands-fill"></i>
                 </div>
-                <div className="text">Manage Clients</div>
+                <div className="text">Manage Clients ({clients.length})</div>
               </div>
             </Link>
             <Link to="/admin/projects">
