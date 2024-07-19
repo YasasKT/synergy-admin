@@ -7,17 +7,32 @@ import { HiDotsVertical } from "react-icons/hi";
 import * as ClientsApi from "../../network/clients_api";
 import SearchBar from "../components/Search";
 import SmallButton from "../components/SmallButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import ActionPopup from "../components/ActionPopup";
+import ConfirmationPopup from "../components/ConfirmationPopup";
 
 function Clients() {
   const [clients, setClients] = useState<ClientModel[]>([]);
   const [Loading, setLoading] = useState(true);
-  const [showLoadingError, setShowLoadingError] =
-    useState(false);
+  const [showLoadingError, setShowLoadingError] = useState(false);
   const [query, setQuery] = useState("");
   const [activeClientId, setActiveClientId] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error">("success");
+  const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
+  const [clientToDelete, setClientToDelete] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.showPopup) {
+      setPopupMessage(location.state.message);
+      setPopupType(location.state.type);
+      setShowPopup(true);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     async function loadClients() {
@@ -45,18 +60,38 @@ function Clients() {
   };
 
   async function handleDeleteClick(client: ClientModel) {
-    if (window.confirm("Are you sure you want to delete this client?")) {
+    setClientToDelete(client._id);
+    setShowDeletePopup(true);
+  }
+
+  const confirmDelete = async () => {
+    if (clientToDelete) {
       try {
-        await ClientsApi.deleteClient(client._id);
+        await ClientsApi.deleteClient(clientToDelete);
         setClients(
-          clients.filter((existingClient) => existingClient._id !== client._id)
+          clients.filter(
+            (existingClient) => existingClient._id !== clientToDelete
+          )
         );
+        setPopupMessage("Client deleted successfully!");
+        setPopupType("success");
+        setShowPopup(true);
       } catch (error) {
         console.error(error);
-        alert(error);
+        setPopupMessage("Failed to delete client. Please try again.");
+        setPopupType("error");
+        setShowPopup(true);
+      } finally {
+        setClientToDelete(null);
+        setShowDeletePopup(false);
       }
     }
-  }
+  };
+
+  const cancelDelete = () => {
+    setShowDeletePopup(false);
+    setClientToDelete(null);
+  };
 
   const filteredItems = clients.filter((client) => {
     return client.name.toLowerCase().includes(query.toLowerCase());
@@ -141,7 +176,7 @@ function Clients() {
               </tr>
             </thead>
             <tbody>
-            {clients.length > 0 ? (
+              {clients.length > 0 ? (
                 clientsTable
               ) : (
                 <tr>
@@ -154,6 +189,22 @@ function Clients() {
           </table>
         )}
       </section>
+      {showPopup && (
+        <ActionPopup
+          message={popupMessage}
+          type={popupType}
+          onClose={() => setShowPopup(false)}
+          position="top-right"
+        />
+      )}
+      {showDeletePopup && clientToDelete && (
+        <ConfirmationPopup
+          message={`Are you sure you want to delete this client?`}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+          type="warning"
+        />
+      )}
     </div>
   );
 }

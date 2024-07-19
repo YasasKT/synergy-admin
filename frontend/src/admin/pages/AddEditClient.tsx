@@ -7,6 +7,7 @@ import { Client } from "../models/client";
 import { useForm } from "react-hook-form";
 import { ClientInput } from "../../network/clients_api";
 import * as ClientsApi from "../../network/clients_api";
+import ActionPopup from "../components/ActionPopup";
 
 const AddEditClient = () => {
   const { id } = useParams<{ id?: string }>();
@@ -17,6 +18,9 @@ const AddEditClient = () => {
     string | null
   >(null);
   const [showImageError, setShowImageError] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error">("error");
 
   const {
     register,
@@ -37,7 +41,6 @@ const AddEditClient = () => {
           setImage(null);
         } catch (error) {
           console.error(error);
-          alert(error);
         }
       }
     };
@@ -59,6 +62,12 @@ const AddEditClient = () => {
       hasError = true;
     } else {
       setShowImageError(false);
+    }
+
+    if (!isValid || hasError) {
+      setPopupMessage("Please fix the errors in the form");
+      setPopupType("error");
+      setShowPopup(true);
     }
 
     return isValid && !hasError;
@@ -83,20 +92,28 @@ const AddEditClient = () => {
           existingClient._id,
           formData
         );
-        onClientSave(updatedClient);
+        onClientSave(updatedClient, "Client updated successfully!");
       } else {
         const newClient = await ClientsApi.createClient(formData);
-        onClientSave(newClient);
+        onClientSave(newClient, "Client added successfully!");
       }
     } catch (error) {
       console.error(error);
-      alert(error);
+      onClientSaveError("Failed to save client. Please try again.");
     }
   }
 
-  async function onClientSave(client: Client) {
+  async function onClientSave(client: Client, message: string) {
     console.log("Client Saved: ", client);
-    navigate("/admin/clients");
+    navigate("/admin/clients", {
+      state: { showPopup: true, message, type: "success" },
+    });
+  }
+
+  async function onClientSaveError(message: string) {
+    navigate("/admin/clients", {
+      state: { showPopup: true, message, type: "error" },
+    });
   }
 
   return (
@@ -153,6 +170,14 @@ const AddEditClient = () => {
           </form>
         </div>
       </section>
+      {showPopup && (
+        <ActionPopup
+          message={popupMessage}
+          type={popupType}
+          onClose={() => setShowPopup(false)}
+          position="top-right"
+        />
+      )}
     </>
   );
 };

@@ -7,8 +7,10 @@ import { HiDotsVertical } from "react-icons/hi";
 import * as ProjectsApi from "../../network/projects_api";
 import SearchBar from "../components/Search";
 import SmallButton from "../components/SmallButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import ActionPopup from "../components/ActionPopup";
+import ConfirmationPopup from "../components/ConfirmationPopup";
 
 function Projects() {
   const [projects, setProjects] = useState<ProjectModel[]>([]);
@@ -17,7 +19,21 @@ function Projects() {
     useState(false);
   const [query, setQuery] = useState("");
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error">("success");
+  const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.showPopup) {
+      setPopupMessage(location.state.message);
+      setPopupType(location.state.type);
+      setShowPopup(true);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     async function loadProjects() {
@@ -45,20 +61,38 @@ function Projects() {
   };
 
   async function handleDeleteClick(project: ProjectModel) {
-    if (window.confirm("Are you sure you want to delete this project?")) {
+    setProjectToDelete(project._id);
+    setShowDeletePopup(true);
+  }
+
+  const confirmDelete = async () => {
+    if (projectToDelete) {
       try {
-        await ProjectsApi.deleteProject(project._id);
+        await ProjectsApi.deleteProject(projectToDelete);
         setProjects(
           projects.filter(
-            (existingProject) => existingProject._id !== project._id
+            (existingClient) => existingClient._id !== projectToDelete
           )
         );
+        setPopupMessage("Project deleted successfully!");
+        setPopupType("success");
+        setShowPopup(true);
       } catch (error) {
         console.error(error);
-        alert(error);
+        setPopupMessage("Failed to delete project. Please try again.");
+        setPopupType("error");
+        setShowPopup(true);
+      } finally {
+        setProjectToDelete(null);
+        setShowDeletePopup(false);
       }
     }
-  }
+  };
+
+  const cancelDelete = () => {
+    setShowDeletePopup(false);
+    setProjectToDelete(null);
+  };
 
   const filteredItems = projects.filter((project) => {
     return project.client.toLowerCase().includes(query.toLowerCase());
@@ -164,6 +198,22 @@ function Projects() {
           </table>
         )}
       </section>
+      {showPopup && (
+        <ActionPopup
+          message={popupMessage}
+          type={popupType}
+          onClose={() => setShowPopup(false)}
+          position="top-right"
+        />
+      )}
+      {showDeletePopup && projectToDelete && (
+        <ConfirmationPopup
+          message={`Are you sure you want to delete this project?`}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+          type="warning"
+        />
+      )}
     </div>
   );
 }

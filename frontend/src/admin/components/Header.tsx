@@ -1,20 +1,35 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../css/header.css";
 import { useEffect, useState } from "react";
-import { User } from "./../models/user";
 import * as UsersApi from "../../network/users_api";
+import ConfirmationPopup from "./ConfirmationPopup";
+import ActionPopup from "./ActionPopup";
 
-interface HeaderProps {
-  user: User | null;
-  // onSignUpClicked: () => void;
-  // onLoginClicked: () => void;
-  onLogoutSuccessful: () => void;
-}
-
-const Header = ({ user, onLogoutSuccessful }: HeaderProps) => {
+const Header = () => {
   const [isActive, setIsActive] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [showLogoutPopup, setShowLogoutpopup] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [backendError, setBackendError] = useState<string | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    async function checkAuthentication() {
+      try {
+        await UsersApi.getLoggedInUser();
+      } catch (error) {
+        console.error(error);
+        setBackendError(
+          (error as { message: string }).message ||
+            "An error occurred. Please try again."
+        );
+        navigate("/admin/login");
+      }
+    }
+
+    checkAuthentication();
+  }, [navigate]);
 
   const handleDropdownToggle = () => {
     setIsDropdownVisible(!isDropdownVisible);
@@ -41,10 +56,9 @@ const Header = ({ user, onLogoutSuccessful }: HeaderProps) => {
   async function logout() {
     try {
       await UsersApi.logout();
-      onLogoutSuccessful();
+      navigate("/admin/login");
     } catch (error) {
       console.error(error);
-      alert(error);
     }
   }
 
@@ -104,10 +118,7 @@ const Header = ({ user, onLogoutSuccessful }: HeaderProps) => {
             onClick={handleDropdownToggle}
           ></i>
           {isDropdownVisible && (
-            <div
-              className="dropdown-menu"
-              onMouseLeave={() => setIsDropdownVisible(false)}
-            >
+            <div className="dropdown-menu">
               <NavLink to="/admin/profile" className="dropdown-item">
                 Manage My Account
               </NavLink>
@@ -117,18 +128,26 @@ const Header = ({ user, onLogoutSuccessful }: HeaderProps) => {
               >
                 Logout
               </div>
-
-              {showLogoutPopup && (
-                <ConfirmationPopup
-                  message="Are you sure you want to logout?"
-                  onCancel={() => setShowLogoutpopup(false)}
-                  onConfirm={logout}
-                />
-              )}
             </div>
           )}
         </div>
       </section>
+      {showLogoutPopup && (
+        <ConfirmationPopup
+          message="Are you sure you want to Logout?"
+          onCancel={() => setShowLogoutpopup(false)}
+          onConfirm={logout}
+          type="warning"
+        />
+      )}
+      {backendError && (
+        <ActionPopup
+          message={backendError || "An error occurred. Please try again."}
+          onClose={() => setBackendError(undefined)}
+          type="error"
+          position="bottom-right"
+        />
+      )}
     </header>
   );
 };

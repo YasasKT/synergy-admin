@@ -7,6 +7,7 @@ import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import * as UsersApi from "../../network/users_api";
 import { User } from "../models/user";
+import ActionPopup from "../components/ActionPopup";
 
 const Login = () => {
   const {
@@ -19,8 +20,8 @@ const Login = () => {
   const [backendError, setBackendError] = useState<string | undefined>(
     undefined
   );
-
   const [isLocked, setIsLocked] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
 
   const toggleLocked = () => {
     setIsLocked(!isLocked);
@@ -36,12 +37,15 @@ const Login = () => {
         (error as { message: string }).message ||
           "An error occurred. Please try again."
       );
+      setShowPopup(true);
     }
   }
 
   async function onLoginSuccessful(user: User) {
     console.log("Login Successful: ", user);
-    navigate("/admin");
+    navigate("/admin", {
+      state: { showPopup: true, message: "Login Successful!" },
+    });
   }
 
   return (
@@ -76,6 +80,14 @@ const Login = () => {
           Register
         </Link>
       </form>
+      {showPopup && (
+        <ActionPopup
+          message={backendError || "An error occurred. Please try again."}
+          onClose={() => setShowPopup(false)}
+          type="error"
+          position="top-right"
+        />
+      )}
     </div>
   );
 };

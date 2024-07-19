@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Client } from "../models/client";
 import CustomDropdown from "../components/CustomDropdown";
+import ActionPopup from "../components/ActionPopup";
 
 const AddEditProject = () => {
   const { id } = useParams<{ id?: string }>();
@@ -23,6 +24,9 @@ const AddEditProject = () => {
   const [showImageError, setShowImageError] = useState(false);
   const [clientError, setClientError] = useState<string | undefined>(undefined);
   const [isClientValid, setIsClientValid] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error">("error");
 
   const {
     register,
@@ -48,7 +52,6 @@ const AddEditProject = () => {
           setIsClientValid(true);
         } catch (error) {
           console.error(error);
-          alert(error);
         }
       }
     };
@@ -90,6 +93,12 @@ const AddEditProject = () => {
       setClientError(undefined);
     }
 
+    if (!isValid || hasError) {
+      setPopupMessage("Please fix the errors in the form");
+      setPopupType("error");
+      setShowPopup(true);
+    }
+
     return isValid && !hasError;
   };
 
@@ -118,20 +127,28 @@ const AddEditProject = () => {
           existingProject._id,
           formData
         );
-        onProjectSave(updatedProject);
+        onProjectSave(updatedProject, "Project updated successfully!");
       } else {
         const newProject = await ProjectsApi.createProject(formData);
-        onProjectSave(newProject);
+        onProjectSave(newProject, "Project added successfully!");
       }
     } catch (error) {
       console.error(error);
-      alert(error);
+      onProjectSaveError("Failed to save project. Please try again.");
     }
   }
 
-  async function onProjectSave(project: Project) {
+  async function onProjectSave(project: Project, message: string) {
     console.log("Project Saved: ", project);
-    navigate("/admin/projects");
+    navigate("/admin/projects", {
+      state: { showPopup: true, message, type: "success" },
+    });
+  }
+
+  async function onProjectSaveError(message: string) {
+    navigate("/admin/projects", {
+      state: { showPopup: true, message, type: "error" },
+    });
   }
 
   const handleClientChange = (selectedClient: string) => {
@@ -284,6 +301,14 @@ const AddEditProject = () => {
           </form>
         </div>
       </section>
+      {showPopup && (
+        <ActionPopup
+          message={popupMessage}
+          type={popupType}
+          onClose={() => setShowPopup(false)}
+          position="top-right"
+        />
+      )}
     </>
   );
 };
