@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import * as UsersApi from "../../network/users_api";
 import ConfirmationPopup from "./ConfirmationPopup";
 import ActionPopup from "./ActionPopup";
+// import { useForm } from "react-hook-form";
 
 const Header = () => {
   const [isActive, setIsActive] = useState(false);
@@ -14,22 +15,39 @@ const Header = () => {
     undefined
   );
 
-  useEffect(() => {
-    async function checkAuthentication() {
-      try {
-        await UsersApi.getLoggedInUser();
-      } catch (error) {
-        console.error(error);
-        setBackendError(
-          (error as { message: string }).message ||
-            "An error occurred. Please try again."
-        );
-        navigate("/admin/login");
-      }
-    }
+  // const { setValue } = useForm();
 
-    checkAuthentication();
-  }, [navigate]);
+  // useEffect(() => {
+  //   async function checkAuthentication() {
+  //     try {
+  //       const user = await UsersApi.getLoggedInUser();
+  //       setValue("username", user.username);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setBackendError(
+  //         (error as { message: string }).message ||
+  //           "An error occurred. Please try again."
+  //       );
+  //       navigate("/admin/login");
+  //     }
+  //   }
+
+  //   checkAuthentication();
+  // }, [navigate, setValue]);
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const user = await UsersApi.getLoggedInUser();
+  //       setValue("username", user.username);
+  //     } catch (error) {
+  //       console.error(error);
+  //       alert("Failed to load user data.");
+  //     }
+  //   };
+
+  //   fetchUserData();
+  // }, [setValue]);
 
   const handleDropdownToggle = () => {
     setIsDropdownVisible(!isDropdownVisible);

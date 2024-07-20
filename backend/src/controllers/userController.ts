@@ -122,3 +122,113 @@ export const logout: RequestHandler = (req, res, next) => {
     }
   });
 };
+
+export const updateUser: RequestHandler = async (req, res, next) => {
+  const authenticatedUserId = req.session.userId;
+  const { username, password, newPassword } = req.body;
+
+  try {
+    if (!authenticatedUserId) {
+      throw createHttpError(401, "User not authenticated");
+    }
+
+    const user = await UserModel.findById(authenticatedUserId)
+      .select("+password")
+      .exec();
+
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (username) {
+      if (!password) {
+        throw createHttpError(
+          400,
+          "Current password is required to update username"
+        );
+      }
+
+      const existingUsername = await UserModel.findOne({ username }).exec();
+      if (
+        existingUsername &&
+        existingUsername._id.toString() !== user._id.toString()
+      ) {
+        throw createHttpError(409, "Username already exists.");
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        throw createHttpError(400, "Current password is incorrect");
+      }
+
+      user.username = username;
+    }
+
+    if (newPassword) {
+      if (!password) {
+        throw createHttpError(
+          400,
+          "Current password is required to update password"
+        );
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        throw createHttpError(400, "Current password is incorrect");
+      }
+
+      user.password = await bcrypt.hash(newPassword, 10);
+    }
+
+    const updatedUser = await user.save();
+
+    const userResponse = {
+      username: updatedUser.username,
+      _id: updatedUser._id,
+    };
+
+    res.status(200).json(userResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllUsers: RequestHandler = async (req, res, next) => {
+  const authenticatedUserId = req.session.userId;
+
+  try {
+    if (!authenticatedUserId) {
+      throw createHttpError(401, "User not authenticated");
+    }
+    const users = await UserModel.find();
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser: RequestHandler = async (req, res, next) => {
+  const authenticatedUserId = req.session.userId;
+
+  try {
+    if (!authenticatedUserId) {
+      throw createHttpError(401, "User not authenticated");
+    }
+
+    const user = await UserModel.findByIdAndDelete(authenticatedUserId).exec();
+
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    req.session.destroy((error) => {
+      if (error) {
+        next(error);
+      } else {
+        res.status(200).json({ message: "Account deleted successfully" });
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};

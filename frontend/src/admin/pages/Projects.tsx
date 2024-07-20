@@ -161,7 +161,11 @@ function Projects() {
       <Header />
       <section>
         <div className="flex">
-          <SearchBar query={query} onSearchChange={handleSearchChange} />
+          <SearchBar
+            query={query}
+            onSearchChange={handleSearchChange}
+            placeholder="Search for Client..."
+          />
           <SmallButton to="/admin/projects/add" />
         </div>
 

@@ -18,6 +18,13 @@ export async function getLoggedInUser(): Promise<User> {
   return response.json();
 }
 
+export async function getAllUsers(): Promise<User[]> {
+  const response = await fetchData("http://localhost:5000/api/users/admins", {
+    method: "GET",
+  });
+  return response.json();
+}
+
 export interface SignUpCredentials {
   username: string;
   password: string;
@@ -53,4 +60,31 @@ export async function login(credentials: LoginCredentials): Promise<User> {
 
 export async function logout() {
   await fetchData("http://localhost:5000/api/users/logout", { method: "POST" });
+}
+
+export interface UpdateCredentials {
+  username?: string;
+  password: string;
+  newPassword?: string;
+  confirmPassword?: string;
+}
+
+export async function updateProfile(
+  credentials: UpdateCredentials
+): Promise<User> {
+  const response = await fetchData("http://localhost:5000/api/users/edit", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  });
+
+  return response.json();
+}
+
+export async function deleteProfile() {
+  await fetchData("http://localhost:5000/api/users/delete", {
+    method: "DELETE",
+  });
 }

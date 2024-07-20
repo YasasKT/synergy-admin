@@ -39,10 +39,12 @@
 
 .header .flex .logo-container .header-title .admin {
   color: var(--white);
+  font-weight: 500;
 }
 
 .header .flex .logo-container .header-title .panel {
-  color: var(--main-color);
+  color: #014c59;
+  font-weight: 500;
 }
 
 .header .flex .navbar a {
@@ -120,7 +122,7 @@
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
   .header .flex .navbar a {
     margin: 0 1rem;
   }

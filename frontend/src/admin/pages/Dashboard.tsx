@@ -7,6 +7,7 @@ import { Client } from "../models/client";
 import { Link, useLocation } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import ActionPopup from "../components/ActionPopup";
+import useUser from "../hooks/useUser";
 
 function Dashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -18,7 +19,7 @@ function Dashboard() {
   const [showLoadingError, setShowLoadingError] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
-
+  const { user } = useUser();
   const location = useLocation();
 
   useEffect(() => {
@@ -108,7 +109,7 @@ function Dashboard() {
       {!loading && !errorMessage && (
         <section className="dashboard">
           <div className="left-column">
-            <div className="welcome">Welcome, Katudampe</div>
+            <div className="welcome">Welcome, {user?.username}</div>
             <div className="notification">You have received 5 messages.</div>
             <div className="link">
               <i className="ri-arrow-right-double-line"></i>See messages
@@ -152,12 +153,14 @@ function Dashboard() {
                 </div>
                 <div className="text">Messages</div>
               </div>
-              <div className="box">
-                <div className="icon">
-                  <i className="ri-shield-user-fill"></i>
+              <Link to="/admin/admins">
+                <div className="box">
+                  <div className="icon">
+                    <i className="ri-shield-user-fill"></i>
+                  </div>
+                  <div className="text">Admins</div>
                 </div>
-                <div className="text">Admins</div>
-              </div>
+              </Link>
             </div>
           </div>
         </section>

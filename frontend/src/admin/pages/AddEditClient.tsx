@@ -99,7 +99,7 @@ const AddEditClient = () => {
       }
     } catch (error) {
       console.error(error);
-      onClientSaveError("Failed to save client. Please try again.");
+      onClientSaveError("Failed to save client");
     }
   }
 

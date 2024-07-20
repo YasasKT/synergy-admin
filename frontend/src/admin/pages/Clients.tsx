@@ -155,7 +155,7 @@ function Clients() {
       <Header />
       <section>
         <div className="flex">
-          <SearchBar query={query} onSearchChange={handleSearchChange} />
+          <SearchBar query={query} onSearchChange={handleSearchChange} placeholder="Search Client..." />
           <SmallButton to="/admin/clients/add" />
         </div>
 

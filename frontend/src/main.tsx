@@ -13,6 +13,9 @@ import Clients from "./admin/pages/Clients";
 import Register from "./admin/pages/Register";
 import AddEditProject from "./admin/pages/AddEditProject";
 import AddEditClient from "./admin/pages/AddEditClient";
+import { UserProvider } from "./admin/auth/UserProvider";
+import Admins from "./admin/pages/Admins";
+import Messages from "./admin/pages/Messages";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +29,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Dashboard />,
+    element: (
+      <UserProvider>
+        <Dashboard />
+      </UserProvider>
+    ),
   },
   {
     path: "/admin/login",
@@ -38,31 +45,75 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin/profile",
-    element: <Profile />,
+    element: (
+      <UserProvider>
+        <Profile />
+      </UserProvider>
+    ),
   },
   {
     path: "/admin/projects",
-    element: <Projects />,
+    element: (
+      <UserProvider>
+        <Projects />
+      </UserProvider>
+    ),
   },
   {
     path: "/admin/projects/add",
-    element: <AddEditProject />,
+    element: (
+      <UserProvider>
+        <AddEditProject />
+      </UserProvider>
+    ),
   },
   {
     path: "/admin/projects/edit/:id",
-    element: <AddEditProject />,
+    element: (
+      <UserProvider>
+        <AddEditProject />
+      </UserProvider>
+    ),
   },
   {
     path: "/admin/clients",
-    element: <Clients />,
+    element: (
+      <UserProvider>
+        <Clients />
+      </UserProvider>
+    ),
   },
   {
     path: "/admin/clients/add",
-    element: <AddEditClient />,
+    element: (
+      <UserProvider>
+        <AddEditClient />
+      </UserProvider>
+    ),
   },
   {
     path: "/admin/clients/edit/:id",
-    element: <AddEditClient />,
+    element: (
+      <UserProvider>
+        <AddEditClient />
+      </UserProvider>
+    ),
+  },
+  {
+    path: "/admin/admins",
+    element: (
+      <UserProvider>
+        <Admins />
+      </UserProvider>
+    ),
+  },
+  {
+    path: "/admin/messages",
+    element: (
+      <UserProvider>
+        <Messages />
+      </UserProvider>
+    ),
   },
 ]);
 
