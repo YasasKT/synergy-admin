@@ -177,7 +177,7 @@ const AddEditProject = () => {
             />
             <div className="input-box-container">
               <div className="title-container">
-                <span className="title">Type</span>
+                <span className="title">Title</span>
                 <span className="required">*</span>
               </div>
               <div
@@ -252,13 +252,6 @@ const AddEditProject = () => {
                   placeholder="Enter Project Year"
                   {...register("year", {
                     required: "Year is Required",
-                    validate: {
-                      validYear: (value) =>
-                        (/^\d{4}$/.test(value.toString()) &&
-                          value >= 1900 &&
-                          value <= new Date().getFullYear()) ||
-                        "Year must be a valid year",
-                    },
                   })}
                   autoComplete="off"
                 />

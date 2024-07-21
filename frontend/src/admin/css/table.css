@@ -31,7 +31,7 @@ tr:last-child td:last-child {
 }
 
 .hd-image {
-  width: 15%;
+  width: 10%;
 }
 
 .hd-name {
@@ -47,15 +47,14 @@ tr:last-child td:last-child {
 }
 
 .image-cell {
-  width: 60px;
-  height: 60px;
-  align-content: start;
+  width: 100px;
+  height: 100px;
 }
 
 .image {
-  object-fit: cover;
-  height: 100%;
-  width: 100px;
+  object-fit: contain;
+  max-width: 100%; /* Make sure the image fits within its container */
+  max-height: 100%;
 }
 
 .description-cell {
@@ -132,4 +131,25 @@ tr:last-child td:last-child {
 .popup-menu button:nth-child(2):hover {
   color: var(--white);
   background-color: var(--red);
+}
+
+@media (max-width: 768px) {
+  .hd-location,
+  .location-cell {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .hd-year,
+  .year-cell {
+    display: none;
+  }
+}
+
+@media (max-width: 450px) {
+  .hd-image,
+  .image-cell {
+    display: none;
+  }
 }

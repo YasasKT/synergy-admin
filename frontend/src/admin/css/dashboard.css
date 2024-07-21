@@ -36,6 +36,7 @@
 }
 
 .dashboard .right-column .box-container .box {
+  height: 100px;
   background-color: var(--link);
   color: var(--white);
   padding: 1.5rem;
@@ -52,7 +53,7 @@
   background-color: var(--aqua);
 }
 
-.dashboard .right-column .box-container .box .icon {
+.dashboard .right-column .box-container .box .box-icon {
   font-size: 2rem;
 }
 
@@ -77,5 +78,9 @@
   .dashboard .right-column .box-container {
     grid-template-columns: repeat(2, 1fr);
     align-items: stretch;
+  }
+
+  .dashboard .right-column .box-container .box {
+    padding: 1rem;
   }
 }

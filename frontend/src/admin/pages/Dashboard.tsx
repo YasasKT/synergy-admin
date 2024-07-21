@@ -119,21 +119,21 @@ function Dashboard() {
             <div className="box-container">
               <Link to="/admin/projects/add">
                 <div className="box">
-                  <div className="icon">
+                  <div className="box-icon">
                     <i className="ri-add-box-fill"></i>
                   </div>
                   <div className="text">New Project</div>
                 </div>
               </Link>
               <div className="box">
-                <div className="icon">
+                <div className="box-icon">
                   <i className="ri-news-fill"></i>
                 </div>
                 <div className="text">Manage Blogs</div>
               </div>
               <Link to="/admin/clients">
                 <div className="box">
-                  <div className="icon">
+                  <div className="box-icon">
                     <i className="ri-shake-hands-fill"></i>
                   </div>
                   <div className="text">Manage Clients ({clients.length})</div>
@@ -141,21 +141,21 @@ function Dashboard() {
               </Link>
               <Link to="/admin/projects">
                 <div className="box">
-                  <div className="icon">
+                  <div className="box-icon">
                     <i className="ri-bar-chart-box-fill"></i>
                   </div>
                   <div className="text">All Projects ({projects.length})</div>
                 </div>
               </Link>
               <div className="box">
-                <div className="icon">
+                <div className="box-icon">
                   <i className="ri-mail-fill"></i>
                 </div>
                 <div className="text">Messages</div>
               </div>
               <Link to="/admin/admins">
                 <div className="box">
-                  <div className="icon">
+                  <div className="box-icon">
                     <i className="ri-shield-user-fill"></i>
                   </div>
                   <div className="text">Admins</div>

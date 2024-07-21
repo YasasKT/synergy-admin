@@ -4,7 +4,7 @@ export interface Project {
   type: string;
   client: string;
   location: string;
-  year: number;
+  year: string;
   description?: string;
   createdAt: string;
   updatedAt: string;

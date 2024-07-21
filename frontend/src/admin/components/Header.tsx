@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import * as UsersApi from "../../network/users_api";
 import ConfirmationPopup from "./ConfirmationPopup";
 import ActionPopup from "./ActionPopup";
-// import { useForm } from "react-hook-form";
 
 const Header = () => {
   const [isActive, setIsActive] = useState(false);
@@ -86,11 +85,17 @@ const Header = () => {
         <NavLink to="/admin">
           <div className="logo-container">
             <div className="img-container">
-              <img src="/img/synergy_logo_blue1.png" alt="synergy-logo" />
+              <img src="/img/synergy_admin_dark.png" alt="synergy-logo" />
             </div>
             <div className="header-title">
+              <div className="logo-text-container">
+                <img
+                  src="/img/synergy_admin_text.png"
+                  alt="synergy-text"
+                  className="logo-text"
+                />
+              </div>
               <span className="admin">Admin</span>
-              <span className="panel">Panel</span>
             </div>
           </div>
         </NavLink>

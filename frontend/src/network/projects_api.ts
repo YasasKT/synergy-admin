@@ -33,7 +33,7 @@ export interface ProjectInput {
   type: string;
   client: string;
   location: string;
-  year: number;
+  year: string;
   description?: string;
 }
 

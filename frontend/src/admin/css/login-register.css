@@ -10,6 +10,19 @@
   justify-content: center;
 }
 
+.spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.75);
+  z-index: 1000;
+}
+
 .login-register-bg .login-form-container {
   display: flex;
   flex-direction: column;
@@ -58,7 +71,7 @@
   -webkit-box-shadow: 0 0 0 1000px transparent inset;
 }
 
-.login-register-bg .login-form-container .input-box .icon {
+.login-register-bg .login-form-container .input-box .login-icon {
   position: absolute;
   top: 50%;
   right: 5%;
@@ -67,8 +80,8 @@
   font-size: 1.1rem;
 }
 
-.login-register-bg .login-form-container .input-box .icon.locked,
-.login-register-bg .login-form-container .input-box .icon.unlocked {
+.login-register-bg .login-form-container .input-box .login-icon.locked,
+.login-register-bg .login-form-container .input-box .login-icon.unlocked {
   cursor: pointer;
 }
 

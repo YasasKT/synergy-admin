@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import * as UsersApi from "../../network/users_api";
 import { User } from "../models/user";
 import ActionPopup from "../components/ActionPopup";
+import Spinner from "../components/Spinner";
 
 const Login = () => {
   const {
@@ -49,46 +50,63 @@ const Login = () => {
   }
 
   return (
-    <div className="login-register-bg">
-      <form className="login-form-container" onSubmit={handleSubmit(onSubmit)}>
-        <h1>Login</h1>
-        {backendError && <p className="error-message">{backendError}</p>}
-        <div className={`input-box ${errors.username ? "invalid" : ""}`}>
-          <input
-            type="text"
-            placeholder="Enter Username"
-            {...register("username", { required: "Username is Required" })}
-          />
-          <FaUser className="icon" />
+    <>
+      {isSubmitting && ( // Check if the form is submitting to show spinner
+        <div className="spinner-container">
+          <Spinner fullPage />
         </div>
-        <div className={`input-box ${errors.password ? "invalid" : ""}`}>
-          <input
-            type={isLocked ? "password" : "text"}
-            placeholder="Enter Password"
-            {...register("password", { required: "Password is Required" })}
-          />
-          {isLocked ? (
-            <RiEyeCloseLine className="icon locked" onClick={toggleLocked} />
-          ) : (
-            <RiEyeFill className="icon unlocked" onClick={toggleLocked} />
-          )}
-        </div>
-        <button className="btn" type="submit" disabled={isSubmitting}>
-          Login
-        </button>
-        <Link to="/admin/register" className="nav-link">
-          Register
-        </Link>
-      </form>
-      {showPopup && (
-        <ActionPopup
-          message={backendError || "An error occurred. Please try again."}
-          onClose={() => setShowPopup(false)}
-          type="error"
-          position="top-right"
-        />
       )}
-    </div>
+      <div className={`login-register-bg ${isSubmitting ? "loading" : ""}`}>
+        <form
+          className="login-form-container"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <h1>Login</h1>
+          {backendError && <p className="error-message">{backendError}</p>}
+          <div className={`input-box ${errors.username ? "invalid" : ""}`}>
+            <input
+              type="text"
+              placeholder="Enter Username"
+              {...register("username", { required: "Username is Required" })}
+            />
+            <FaUser className="login-icon" />
+          </div>
+          <div className={`input-box ${errors.password ? "invalid" : ""}`}>
+            <input
+              type={isLocked ? "password" : "text"}
+              placeholder="Enter Password"
+              {...register("password", { required: "Password is Required" })}
+            />
+            {isLocked ? (
+              <RiEyeCloseLine
+                className="login-icon locked"
+                onClick={toggleLocked}
+              />
+            ) : (
+              <RiEyeFill
+                className="login-icon unlocked"
+                onClick={toggleLocked}
+              />
+            )}
+          </div>
+          <button className="btn" type="submit" disabled={isSubmitting}>
+            Login
+          </button>
+          <Link to="/admin/register" className="nav-link">
+            Register
+          </Link>
+        </form>
+
+        {showPopup && (
+          <ActionPopup
+            message={backendError || "An error occurred. Please try again."}
+            onClose={() => setShowPopup(false)}
+            type="error"
+            position="top-right"
+          />
+        )}
+      </div>
+    </>
   );
 };
 

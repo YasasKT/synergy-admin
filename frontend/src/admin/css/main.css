@@ -351,4 +351,20 @@ section {
     border: none;
     box-shadow: none;
   }
+
+  .search-container {
+    margin-bottom: 1rem;
+  }
+
+  .small-btn {
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 450px) {
+  section {
+    padding: 1rem;
+  }
 }

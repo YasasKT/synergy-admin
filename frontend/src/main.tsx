@@ -2,12 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "remixicon/fonts/remixicon.css";
-import HomePage from "./client/pages/HomePage";
+import Home from "./client/pages/Homepage/Home";
 import AdminNotFound from "./admin/pages/AdminNotFound";
 import Login from "./admin/pages/Login";
 import Dashboard from "./admin/pages/Dashboard";
 import Profile from "./admin/pages/Profile";
-import ClientNotFound from "./client/pages/ClientNotFound";
 import Projects from "./admin/pages/Projects";
 import Clients from "./admin/pages/Clients";
 import Register from "./admin/pages/Register";
@@ -16,12 +15,38 @@ import AddEditClient from "./admin/pages/AddEditClient";
 import { UserProvider } from "./admin/auth/UserProvider";
 import Admins from "./admin/pages/Admins";
 import Messages from "./admin/pages/Messages";
+import NotFoundPage from "./client/pages/NotFoundPage";
+import Services from "./client/pages/Services/Service";
+import AboutUs from "./client/pages/AboutUs/AboutUs";
+import Project from "./client/pages/Projects/Projects";
+import Blogs from "./client/pages/Blogs/Blogs";
+import Contact from "./client/pages/Contact/Contact";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
-    errorElement: <ClientNotFound />,
+    element: <Home />,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/about",
+    element: <AboutUs />,
+  },
+  {
+    path: "/services",
+    element: <Services />,
+  },
+  {
+    path: "/projects",
+    element: <Project />,
+  },
+  {
+    path: "/blog",
+    element: <Blogs />,
+  },
+  {
+    path: "/contact",
+    element: <Contact />,
   },
   {
     path: "admin/*",

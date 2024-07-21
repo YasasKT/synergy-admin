@@ -36,7 +36,7 @@ interface CreateProjectBody {
   type?: string;
   client?: string;
   location?: string;
-  year?: number;
+  year?: string;
   description?: string;
 }
 
@@ -92,7 +92,7 @@ interface UpdateProjectBody {
   type?: string;
   client?: string;
   location?: string;
-  year?: number;
+  year?: string;
   description?: string;
 }
 

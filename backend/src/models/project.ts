@@ -6,7 +6,7 @@ const projectSchema = new Schema(
     type: { type: String, required: true },
     client: { type: String, required: true },
     location: { type: String, required: true },
-    year: { type: Number, required: true },
+    year: { type: String, required: true },
     description: { type: String, required: false },
   },
   { timestamps: true }

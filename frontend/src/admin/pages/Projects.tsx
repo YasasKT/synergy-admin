@@ -123,8 +123,8 @@ function Projects() {
           </td>
           <td>{project.type}</td>
           <td>{project.client}</td>
-          <td>{project.location}</td>
-          <td>{project.year}</td>
+          <td className="location-cell">{project.location}</td>
+          <td className="year-cell">{project.year}</td>
           <td id="menu-container">
             {activeProjectId === project._id && (
               <div className="popup-menu">
@@ -180,11 +180,11 @@ function Projects() {
             <thead>
               <tr>
                 <th></th>
-                <th>Image</th>
+                <th className="hd-image">Image</th>
                 <th>Type</th>
                 <th>Client</th>
-                <th>Location</th>
-                <th>Year</th>
+                <th className="hd-location">Location</th>
+                <th className="hd-year">Year</th>
                 <th></th>
               </tr>
             </thead>
