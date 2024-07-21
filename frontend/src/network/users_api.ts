@@ -26,6 +26,7 @@ export async function getAllUsers(): Promise<User[]> {
 }
 
 export interface SignUpCredentials {
+  secret_key: string;
   username: string;
   password: string;
   confirmPassword: string;

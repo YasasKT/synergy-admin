@@ -5,4 +5,5 @@ export default cleanEnv(process.env, {
   MONGO_CON_STRING: str(),
   PORT: port(),
   SESSION_SECRET: str(),
+  SECRET_KEY: str(),
 });

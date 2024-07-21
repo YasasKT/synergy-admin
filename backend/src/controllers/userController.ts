@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import createHttpError from "http-errors";
 import UserModel from "../models/user";
 import bcrypt from "bcrypt";
+import env from "../util/validateEnv";
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   const authenticatedUserId = req.session.userId;
@@ -18,8 +19,9 @@ export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
 };
 
 interface SignUpBody {
+  secret_key?: string;
   username?: string;
-  password?: string;
+  password: string;
 }
 
 export const signUp: RequestHandler<
@@ -28,11 +30,16 @@ export const signUp: RequestHandler<
   SignUpBody,
   unknown
 > = async (req, res, next) => {
+  const secret_key = req.body.secret_key;
   const username = req.body.username;
   const passwordRaw = req.body.password;
 
   try {
-    if (!username || !passwordRaw) {
+    if (secret_key !== env.SECRET_KEY) {
+      throw createHttpError(403, "Invalid secret key");
+    }
+
+    if (!secret_key || !username || !passwordRaw) {
       throw createHttpError(400, "Missing parameters");
     }
 
@@ -41,10 +48,7 @@ export const signUp: RequestHandler<
     }).exec();
 
     if (existingUsername) {
-      throw createHttpError(
-        409,
-        "Username already exists. Please log in instead."
-      );
+      throw createHttpError(409, "Username not valid");
     }
 
     const passwordHashed = await bcrypt.hash(passwordRaw, 10);
@@ -101,6 +105,7 @@ export const login: RequestHandler<
     }
 
     req.session.userId = user._id;
+    console.log("Session ID set to:", req.session.userId);
 
     const userResponse = {
       username: user.username,

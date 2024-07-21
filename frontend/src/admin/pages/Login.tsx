@@ -51,7 +51,7 @@ const Login = () => {
 
   return (
     <>
-      {isSubmitting && ( // Check if the form is submitting to show spinner
+      {isSubmitting && (
         <div className="spinner-container">
           <Spinner fullPage />
         </div>

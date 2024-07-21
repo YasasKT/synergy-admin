@@ -110,10 +110,10 @@ function Dashboard() {
         <section className="dashboard">
           <div className="left-column">
             <div className="welcome">Welcome, {user?.username}</div>
-            <div className="notification">You have received 5 messages.</div>
+            {/* <div className="notification">You have received 5 messages.</div>
             <div className="link">
               <i className="ri-arrow-right-double-line"></i>See messages
-            </div>
+            </div> */}
           </div>
           <div className="right-column">
             <div className="box-container">

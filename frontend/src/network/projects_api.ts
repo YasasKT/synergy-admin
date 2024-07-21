@@ -1,7 +1,7 @@
 import { Project } from "../admin/models/project";
 
 async function fetchData(input: RequestInfo, init?: RequestInit) {
-  const response = await fetch(input, init);
+  const response = await fetch(input, { ...init, credentials: "include" });
   if (response.ok) {
     return response;
   } else {
