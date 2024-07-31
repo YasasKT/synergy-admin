@@ -36,7 +36,7 @@ const Offer = () => {
                                     air conditioning. Trust Synergy for innovative and reliable mechanical 
                                     wwengineering expertise.
                                 </p>
-                                <div className="button-container">
+                                <div className="offer-button-container">
                                     <button onClick={() => handleLearnMoreClick('mechanical-solutions')}>Learn More</button>
                                 </div>
                             </AnimatedSection>
@@ -52,7 +52,7 @@ const Offer = () => {
                                     Specializing in distribution systems, surge protection, UPS systems, testing, 
                                     commissioning, and after-care, we ensure reliable and efficient electrical infrastructure 
                                     for your projects.</p>
-                                <div className="button-container">
+                                <div className="offer-button-container">
                                     <button onClick={() => handleLearnMoreClick('electrical-solutions')}>Learn More</button>
                                 </div>
                             </AnimatedSection>
@@ -64,7 +64,7 @@ const Offer = () => {
                                 <h3 className='First-head'>Plumbing</h3>
                                 <h3>Solutions</h3>
                                 <p>We provide comprehensive plumbing services for residential and industrial needs, including water supply piping, sanitary drainage, and industrial piping. Our expertise ensures reliable, high-quality solutions tailored to your requirements.</p>
-                                <div className="button-container">
+                                <div className="offer-button-container">
                                     <button onClick={() => handleLearnMoreClick('plumbing-solutions')}>Learn More</button>
                                 </div>
                             </AnimatedSection>
@@ -76,7 +76,7 @@ const Offer = () => {
                                 <h3 className='First-head'>ELV & Data</h3>
                                 <h3>Solutions</h3>
                                 <p>We specialize in the design and installation of low voltage systems, including data cabling, security systems, and audiovisual solutions. Our expertise ensures reliable and efficient infrastructure to support your technology needs.</p>
-                                <div className="button-container">
+                                <div className="offer-button-container">
                                     <button onClick={() => handleLearnMoreClick('elv-solutions')}>Learn More</button>
                                 </div>
                             </AnimatedSection>

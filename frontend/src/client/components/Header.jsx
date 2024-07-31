@@ -65,7 +65,7 @@ const Header = () => {
           >
             Contact
           </NavLink>
-          <button className="quote-button">Request a Quote</button>
+          <button className="quote-button"><span>Request a Quote</span></button>
         </nav>
       </header>
     </AnimatedSection>

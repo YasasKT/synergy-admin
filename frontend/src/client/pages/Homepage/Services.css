@@ -28,7 +28,7 @@
     height: 0;
     padding-bottom: 100%; /* Maintain aspect ratio */
     border-radius: 100%;
-    background-image: url('/Synergy/Web/synergy-admin/synergy-admin/frontend/src/client/images/Synergy_logo.png');
+    background-image: url('/frontend/src/client/images/Synergy_logo.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;

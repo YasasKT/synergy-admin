@@ -137,7 +137,14 @@
     margin-bottom: 2.5rem;
 }
 
-.offer-card1 button {
+.offer-button-container {
+    margin-bottom: 2rem;
+}
+
+.offer-card1 button,
+.offer-card2 button,
+.offer-card3 button,
+.offer-card4 button {
     margin-top: 2rem;
     padding: 0.9rem 2rem; /* Padding for base screen size */
     background-color: transparent;
@@ -145,49 +152,20 @@
     border: 2px solid #014c59;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.5s ease-out;
     align-self: flex-start; /* Align buttons to the left */
+    position: relative;
 }
 
-.offer-card2 button {
-    margin-top: 0.8rem;
-    padding: 0.9rem 2rem; /* Padding for base screen size */
-    background-color: transparent;
-    border-radius: 5px;
-    border: 2px solid #014c59;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: flex-start; /* Align buttons to the left */
+.offer-card1 button:hover,
+.offer-card2 button:hover,
+.offer-card3 button:hover,
+.offer-card4 button:hover {
+    border-color: #0592c8; /* Change border color on hover */
+    color: #0592c8; /* Change text color on hover */
+    box-shadow: 0 0 10px #0592c8; /* Add blue glow effect */
 }
 
-.offer-card3 button {
-    margin-top: 8.2rem;
-    padding: 0.9rem 2rem; /* Padding for base screen size */
-    background-color: transparent;
-    border-radius: 5px;
-    border: 2px solid #014c59;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: flex-start; /* Align buttons to the left */
-}
-
-.offer-card4 button {
-    margin-top: 9.5rem;
-    padding: 0.9rem 2rem; /* Padding for base screen size */
-    background-color: transparent;
-    border-radius: 5px;
-    border: 2px solid #014c59;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: flex-start; /* Align buttons to the left */
-}
-
-.offer-card1 button:hover, .offer-card2 button:hover, .offer-card3 button:hover, .offer-card4 button:hover {
-    background-color: #0592c8;
-}
 
 .final-container {
     display: flex;

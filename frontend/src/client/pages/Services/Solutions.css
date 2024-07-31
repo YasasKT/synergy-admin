@@ -84,7 +84,7 @@
   padding: 1rem; /* Reduced padding for better responsiveness */
   text-align: left;
   min-width: 300px; /* Ensure minimum width */
-  max-width: 500px; /* Limit max width */
+  max-width: 600px; /* Limit max width */
 }
 
 .solution-card ul li {
@@ -94,6 +94,7 @@
   position: relative;
   line-height: 2.5;
   margin-left: 1rem;
+  margin-right: -10rem;
 }
 
 .solution-card ul li:before {

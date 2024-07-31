@@ -141,18 +141,50 @@
 }
 
 .contact-form button {
+    position: relative;
     padding: 10px 20px;
-    background-color: #0592c8;
+    font-size: 1rem;
     color: #fff;
+    background-color: #0592c8;
+    text-decoration: none;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    overflow: hidden;
+    transition: color 0.4s ease;
+    z-index: 1; /* Ensure the button text is on top of the pseudo-element */
+}
+
+.contact-form button::before,
+.contact-form button::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(58, 87, 92, 0.3);
+    color: #fff;
+    width: 200%;
+    height: 200%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.6s, background 0.4s;
+    z-index: 0; /* Ensure the pseudo-element is behind the button text */
+}
+
+.contact-form button::after {
+    background: rgba(31, 164, 191, 0.6); /* More opaque color */
+    color: #fff;
+    transition-delay: 0.1s;
+}
+
+.contact-form button:hover::before,
+.contact-form button:hover::after {
+    transform: translate(-50%, -50%) scale(1);
 }
 
 .contact-form button:hover {
-    background-color: #014c59;
+    background-color: #014c59; /* Change the background color */
+    color: #fff; /* Ensure text color stays white */
 }
 
 /* Responsive styles */

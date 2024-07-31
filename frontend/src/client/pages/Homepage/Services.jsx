@@ -4,6 +4,7 @@ import './Services.css';
 import Consulting from '../../images/consulting.png';
 import Designing from '../../images/designing.png';
 import Contracting from '../../images/contracting.png';
+import BackgroundImage from '../../images/Synergy_logo.png';
 
 const Services = () => {
     const [activeService, setActiveService] = useState(0);
@@ -23,7 +24,13 @@ const Services = () => {
                 <div className="line-service"></div>
                 <h2 className="Header-service">Our Services</h2>
             </AnimatedSection>
-            <div className='circle'>
+            <div className='circle'
+            style={{
+                backgroundImage: `url(${BackgroundImage})`,
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'contain'
+            }}>
                 <div id="consulting" className={`service consulting ${activeService >= 1 ? 'active' : ''}`}>
                     <img src={Consulting} alt='Consulting Icon' />
                     <div className="service-content">

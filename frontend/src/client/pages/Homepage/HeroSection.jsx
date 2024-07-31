@@ -44,7 +44,7 @@ const HeroSection = () => {
               <h1>Engineering Excellence,<br /> Building the Future</h1>
               <p>Delivering cutting-edge technology and engineering expertise.</p>
               <button onClick={handleLearnMoreClick}>
-                Learn More
+                <div className='text'>Learn More</div>
                 <FaArrowRight size={20}/>
               </button> 
             </div>
